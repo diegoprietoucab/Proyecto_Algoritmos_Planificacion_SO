@@ -1,5 +1,5 @@
 from typing import Optional
-from plan.process.process_state import ProcessState
+from process_state import ProcessState
 from dataclasses import dataclass, field
 
 @dataclass
