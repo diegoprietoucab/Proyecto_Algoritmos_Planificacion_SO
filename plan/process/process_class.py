@@ -1,5 +1,5 @@
 from typing import Optional
-from process_state import ProcessState
+from plan.process.process_state import ProcessState
 from dataclasses import dataclass, field
 
 @dataclass
@@ -31,16 +31,16 @@ class Process:
             raise TypeError("ERROR. La prioridad debe ser un número entero")
         
         if (self.llegada < 0):
-            raise ValueError(f"ERROR. El tiempo de llegada ({self.llegada}) no puede ser negativo")
+            raise ValueError(f"ERROR. El tiempo de llegada no puede ser negativo")
         
         if (self.rafaga <= 0):
-            raise ValueError(f"ERROR. El tiempo de ráfaga ({self.rafaga}) debe ser positivo")
+            raise ValueError(f"ERROR. El tiempo de ráfaga debe ser positivo")
         
         if (self.prioridad < 0):
-            raise ValueError(f"ERROR. La prioridad ({self.prioridad}) no puede ser negativa")
+            raise ValueError(f"ERROR. La prioridad no puede ser negativa")
         
         if (self.pid <= 0):
-            raise ValueError(f"ERROR. El pid ({self.pid}) debe ser positivo")
+            raise ValueError(f"ERROR. El pid debe ser positivo")
 
         self.tiempo_restante = self.rafaga
 

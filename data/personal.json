@@ -1,0 +1,11 @@
+{
+    "procesos": 
+    [
+        { "pid": 1, "llegada": 0,  "rafaga": 2, "prioridad": 1 },
+        { "pid": 2, "llegada": 1,  "rafaga": 1,  "prioridad": 3 },
+        { "pid": 3, "llegada": 2,  "rafaga": 1,  "prioridad": 3 },
+        { "pid": 4, "llegada": 6,  "rafaga": 8,  "prioridad": 2 },
+        { "pid": 5, "llegada": 10,  "rafaga": 3,  "prioridad": 1 },
+        { "pid": 6, "llegada": 10,  "rafaga": 5,  "prioridad": 3 }
+    ]
+}
