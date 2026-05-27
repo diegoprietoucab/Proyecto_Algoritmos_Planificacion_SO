@@ -9,7 +9,7 @@ sys.path.append(
     )
 )
 
-from utils.process_generator import crearListaManual
+from utils.process_generator import crearListaManual, crearListaPredefinida
 
 
 def menu() -> None:
@@ -22,15 +22,16 @@ def main() -> None:
     procesos = []
     while(True):
         menu()
-        choice = input()
-        match(choice):
+        eleccion = input()
+        match(eleccion):
             case "1":
-                print('Holi')
+                procesos = crearListaPredefinida()
             case "2":
                 procesos = crearListaManual()
             case "3":
                 break
             case _:
                 print("\nERROR. Asegúrese de ingresar una opción válida")
+    print(procesos)
 
 main()

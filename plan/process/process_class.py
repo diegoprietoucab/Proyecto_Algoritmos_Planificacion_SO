@@ -18,6 +18,30 @@ class Process:
     tiempo_respuesta: float = field(default = 0, init = False)
 
     def __post_init__(self) -> None:
+        if not isinstance(self.pid, int):
+            raise TypeError("ERROR. El pid debe ser un número entero")
+        
+        if not isinstance(self.llegada, (int, float)):
+            raise TypeError("ERROR. El tiempo de llegada debe ser un número")
+        
+        if not isinstance(self.rafaga, (int, float)):
+            raise TypeError("ERROR. El tiempo de ráfaga debe ser un número")
+        
+        if not isinstance(self.prioridad, int):
+            raise TypeError("ERROR. La prioridad debe ser un número entero")
+        
+        if (self.llegada < 0):
+            raise ValueError(f"ERROR. El tiempo de llegada no puede ser negativo")
+        
+        if (self.rafaga <= 0):
+            raise ValueError(f"ERROR. El tiempo de ráfaga debe ser positivo")
+        
+        if (self.prioridad < 0):
+            raise ValueError(f"ERROR. La prioridad no puede ser negativa")
+        
+        if (self.pid <= 0):
+            raise ValueError(f"ERROR. El pid debe ser positivo")
+
         self.tiempo_restante = self.rafaga
 
     def reiniciar(self) -> None:
