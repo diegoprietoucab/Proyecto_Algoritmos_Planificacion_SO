@@ -9,29 +9,51 @@ sys.path.append(
     )
 )
 
-from utils.process_generator import crearListaManual, crearListaPredefinida
+from utils.process_generator import cargaProcesos
+from plan.algorithms.sjf import sjf
+from plan.algorithms.round_robin import round_robin
+from plan.process.process_class import Process
+from utils.validations import leerFloat
+import ui.interface as ui
 
+def reiniciarTodos(procesos: list[Process]) -> list[Process]:
+    for p in procesos:
+        p.reiniciar()
+    return procesos
 
-def menu() -> None:
-    print("\nSeleccione una de las siguientes opciones: ")
-    print("1. Leer procesos desde un archivo")
-    print("2. Crear proceso personalizado")
-    print("3. Salir\n")
 
 def main() -> None:
-    procesos = []
-    while(True):
-        menu()
+    procesos: list[Process] = []
+    procesos = cargaProcesos()
+    ui.imprimir_tabla_inicial(procesos)
+    
+    # Menú de algoritmos
+    while True:
+        procesos = reiniciarTodos(procesos)
+        ui.menuAlgoritmos()
         eleccion = input()
         match(eleccion):
             case "1":
-                procesos = crearListaPredefinida()
+                # fcfs(procesos)
+                print("FCFS en desarrollo...")
             case "2":
-                procesos = crearListaManual()
+                sjf(procesos)
             case "3":
+                print()
+                round_robin(procesos, leerFloat("Ingrese el valor del quantum:", "el quantum", True))
+            case "4":
+                # priority(procesos)
+                print("Priority en desarrollo...")
+            case "5":
+                # comparar_todos(procesos)
+                print("Comparación en desarrollo...")
+            case "6":
+                procesos = cargaProcesos()
+                ui.imprimir_tabla_inicial(procesos)
+            case "7":
+                print("\n¡Gracias por usar el simulador!")
                 break
             case _:
-                print("\nERROR. Asegúrese de ingresar una opción válida")
-    print(procesos)
+                print("\nERROR. Opción no válida")
 
 main()
