@@ -12,6 +12,8 @@ sys.path.append(
 from utils.process_generator import cargaProcesos
 from plan.algorithms.sjf import sjf
 from plan.algorithms.round_robin import round_robin
+from plan.algorithms.priority import prioridad_apropiativa
+from plan.algorithms.fcfs import fcfs
 from plan.process.process_class import Process
 from utils.validations import leerFloat
 import ui.interface as ui
@@ -34,18 +36,15 @@ def main() -> None:
         eleccion = input()
         match(eleccion):
             case "1":
-                # fcfs(procesos)
-                print("FCFS en desarrollo...")
+                fcfs(procesos)
             case "2":
                 sjf(procesos)
             case "3":
                 print()
                 round_robin(procesos, leerFloat("Ingrese el valor del quantum:", "el quantum", True))
             case "4":
-                # priority(procesos)
-                print("Priority en desarrollo...")
+                prioridad_apropiativa(procesos)
             case "5":
-                # comparar_todos(procesos)
                 print("Comparación en desarrollo...")
             case "6":
                 procesos = cargaProcesos()
