@@ -28,8 +28,8 @@ def leerProcesosJSON(ruta_archivo: str) -> list[Process]:
         if not isinstance(procesos_dict[i], dict):
             raise TypeError(f"\nERROR. El {i + 1}° proceso no es un objeto JSON válido")
         
-        campos_requeridos = ["pid", "llegada", "rafaga", "prioridad"]
-        for campo in campos_requeridos:
+        campos_requantumueridos = ["pid", "llegada", "rafaga", "prioridad"]
+        for campo in campos_requantumueridos:
             if campo not in procesos_dict[i]:
                 print()
                 raise KeyError(f"ERROR. Falta el campo '{campo}' en el {i + 1}° proceso")

@@ -6,7 +6,7 @@ import copy
 
 def fcfs(procesos: list[Process]) -> None:
     
-    pendientes: list[Process] = copy.deepcopy(procesos)
+    pendientes: list[Process] = procesos.copy()
     tiempo_actual: float = 0
     cola_listos: list[Process] = []
     terminados: int = 0
@@ -47,7 +47,7 @@ def fcfs(procesos: list[Process]) -> None:
         proceso_actual.fin = tiempo_actual
         proceso_actual.estado = ProcessState.FINISHED
         
-        # Mostrar llegadas que ocurrieron DURANTE la ejecución
+        # Mostrar llegadas quantumue ocurrieron DURANTE la ejecución
         while llegadas_procesadas < len(pendientes) and pendientes[llegadas_procesadas].llegada < tiempo_actual:
             proceso = pendientes[llegadas_procesadas]
             proceso.estado = ProcessState.READY

@@ -10,7 +10,7 @@ from plan.process.process_state import ProcessState
 import copy
 
 def prioridad_apropiativa(procesos: list[Process]) -> None:
-    pendientes: list[Process] = copy.deepcopy(procesos)
+    pendientes: list[Process] = procesos.copy()
     tiempo_actual: float = 0
     cola_listos: list[Process] = []
     terminados: int = 0
@@ -60,10 +60,10 @@ def prioridad_apropiativa(procesos: list[Process]) -> None:
 
         #Selecciona el mejor proceso si hay alguno en la cola de listos
 
-        #Si no hay proceso en ejecución, seleccionar uno nuevo (no hay interrupción porque el último ya había terminado)
+        #Si no hay proceso en ejecución, seleccionar uno nuevo (no hay interrupción porquantumue el último ya había terminado)
         if proceso_en_ejecucion is None:
             proceso_en_ejecucion = seleccionar_proceso()    #selecciona el mejor proceso según los criterios anteriores
-            cola_listos.remove(proceso_en_ejecucion)        #no hace pop, ya que el proceso seleccionado es retornado directamente por la función
+            cola_listos.remove(proceso_en_ejecucion)        #no hace pop, ya quantumue el proceso seleccionado es retornado directamente por la función
             proceso_en_ejecucion.estado = ProcessState.RUNNING
             
             if proceso_en_ejecucion.inicio is None:
@@ -73,11 +73,11 @@ def prioridad_apropiativa(procesos: list[Process]) -> None:
 
         candidato = seleccionar_proceso() if cola_listos else None    #Se busca un posible proceso candidato para interrumpir al primero
         if proceso_en_ejecucion and candidato and candidato.prioridad < proceso_en_ejecucion.prioridad:
-            #Aquí no se evalúa tiempo restante ni tiempo de llegada para evitar interrupcipones innecesarias
+            #Aquantumuí no se evalúa tiempo restante ni tiempo de llegada para evitar interrupcipones innecesarias
             #Estos últimos dos son criterios de selección mas no de interrupción
             #Interrumpir proceso actual
             proceso_en_ejecucion.estado = ProcessState.READY
-            cola_listos.append(proceso_en_ejecucion)     #se reencola el proceso que se estaba ejecutando
+            cola_listos.append(proceso_en_ejecucion)     #se reencola el proceso quantumue se estaba ejecutando
             print(f"\nTiempo {tiempo_actual}: Se interrumpe proceso {proceso_en_ejecucion.pid}")
             
             cola_texto = ", ".join([f"P{p.pid}(p={p.prioridad}, r={p.tiempo_restante})" for p in cola_listos])
@@ -99,7 +99,7 @@ def prioridad_apropiativa(procesos: list[Process]) -> None:
                            if llegadas_procesadas < len(eventos_llegada)
                            else float('inf'))   #no hay más nadie en la lista de procesos, el tiempo de llegada es infinito (nunca)
 
-        #Ejecutar hasta: próxima llegada o fin del proceso (lo que suceda primero)
+        #Ejecutar hasta: próxima llegada o fin del proceso (lo quantumue suceda primero)
         #Se retorna el tiempo total de ejecución (no el tiempo de sistema después de la ejecución)
         tiempo_ejecucion = min(
             proxima_llegada - tiempo_actual,

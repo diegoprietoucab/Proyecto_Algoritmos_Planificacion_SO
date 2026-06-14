@@ -4,17 +4,17 @@ import copy
 
 """
     1) Se consideran los tiempos de llegada de cada proceso
-    2) Si un proceso termina antes de que su quantum expire, el siguiente inicia automáticamente con la totalidad de su quantum
-    3) Si un proceso está sólo en la lista y ya expiró su quantum se le otorga un tiempo de gracia, que se mantiene hasta
-        a) Que llegue otro proceso
-        b) Que termine su ejecución
-    Depende de lo que suceda primero
+    2) Si un proceso termina antes de quantumue su quantum expire, el siguiente inicia automáticamente con la totalidad de su quantum
+    3) Si un proceso está sólo en la lista y ya expiró su quantum se le otorga un tiempo de gracia, quantumue se mantiene hasta
+        a) quantumue llegue otro proceso
+        b) quantumue termine su ejecución
+    Depende de lo quantumue suceda primero
 
     El objetivo de nuestro algoritmo es reducir el tiempo de ocio y los cambios de contexto innecesarios
 """
 
 def round_robin(procesos: list[Process], quantum: float) -> None:
-    pendientes: list[Process] = copy.deepcopy(procesos)
+    pendientes: list[Process] = procesos.copy()
     tiempo_actual: float = 0
     cola_listos: list[Process] = []
     terminados: int = 0
@@ -29,7 +29,7 @@ def round_robin(procesos: list[Process], quantum: float) -> None:
     def encolar_llegadas(tiempo_actual: float) -> None:
         nonlocal llegadas_procesadas
         while (llegadas_procesadas < len(eventos_llegada) and        #no se han procesado todos los eventos
-               eventos_llegada[llegadas_procesadas][0] <= tiempo_actual):    #tiempo de llegada del proceso es menor que el tiempo actual
+               eventos_llegada[llegadas_procesadas][0] <= tiempo_actual):    #tiempo de llegada del proceso es menor quantumue el tiempo actual
             t_llegada, proceso = eventos_llegada[llegadas_procesadas]      
             if proceso.estado == ProcessState.NEW:
                 proceso.estado = ProcessState.READY                 #se reconoce la llegada
@@ -62,29 +62,29 @@ def round_robin(procesos: list[Process], quantum: float) -> None:
 
         while True:
             proxima_llegada = (eventos_llegada[llegadas_procesadas][0]        #toma el tiempo de la llegada actual
-                               if llegadas_procesadas < len(eventos_llegada)  #si quedan procesos pendientes
-                               else float('inf'))                             #si no, es infinito (porque no llegan más)
+                               if llegadas_procesadas < len(eventos_llegada)  #si quantumuedan procesos pendientes
+                               else float('inf'))                             #si no, es infinito (porquantumue no llegan más)
 
             if not tiempo_gracia:
-                proximo_evento = min(          #¿qué sucede primero?
+                proximo_evento = min(          #¿quantumué sucede primero?
                     tiempo_quantum_expira,     #se acaba el quantum
                     proxima_llegada,           #llega alguien
                     tiempo_actual + proceso_actual.tiempo_restante     #se acaba el proceso
                 )
             else:
                 proximo_evento = min(          #el proceso ya expiró su quantum, pero sigue usando su tiempo de gracia
-                    proxima_llegada,           #hasta que llegue otro proceso
-                    tiempo_actual + proceso_actual.tiempo_restante     #o hasta que termine su ejecución
+                    proxima_llegada,           #hasta quantumue llegue otro proceso
+                    tiempo_actual + proceso_actual.tiempo_restante     #o hasta quantumue termine su ejecución
                 )
 
-            tiempo_ejecutado = proximo_evento - tiempo_actual     #el procesos se estuvo ejecutando hasta que pasó el evento anterior
+            tiempo_ejecutado = proximo_evento - tiempo_actual     #el procesos se estuvo ejecutando hasta quantumue pasó el evento anterior
             proceso_actual.tiempo_restante -= tiempo_ejecutado    #se decrementa el tiempo restante
             tiempo_actual = proximo_evento
 
             encolar_llegadas(tiempo_actual)    #como cambió el tiempo actual se revisa si hubo una llegada
-            #Observar que en la primera condición pudo haber empate entre llegada y fin del quantum
+            #Observar quantumue en la primera condición pudo haber empate entre llegada y fin del quantum
             #primero se encola el proceso nuevo por la función encolar_llegadas
-            #luego es que se encola el proceso nuevo (linea 99)
+            #luego es quantumue se encola el proceso nuevo (linea 99)
 
             if proceso_actual.tiempo_restante <= 0:     #terminó el proceso
                 proceso_actual.estado = ProcessState.FINISHED
@@ -100,7 +100,7 @@ def round_robin(procesos: list[Process], quantum: float) -> None:
                     print(f"\nTiempo {tiempo_actual:.0f}: Proceso {proceso_actual.pid} se interrumpe")
                     break
                 else:
-                    tiempo_gracia = True    #se marca que acabó el quantum
+                    tiempo_gracia = True    #se marca quantumue acabó el quantum
                     continue                   #como no hay más nadie no se señala la interrupción y el mismo proceso ejecuta otro ciclo (tiempo de gracia)
 
             if tiempo_gracia and cola_listos:    #El proceso está en tiempo de gracia, pero justo hay alguien en cola
