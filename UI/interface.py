@@ -8,7 +8,8 @@ def menuAlgoritmos() -> None:
     print("4. Ejecutar Prioridades")
     print("5. Ver tabla comparativa")
     print("6. Cargar otros procesos")
-    print("7. Salir\n")
+    print("7. Ejecutar Simulación de Procesos (FCFS)")
+    print("8. Salir\n")
 
 def imprimir_tabla_inicial(procesos: list[Process]) -> None:
     """

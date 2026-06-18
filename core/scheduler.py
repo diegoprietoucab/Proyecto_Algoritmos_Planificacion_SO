@@ -19,6 +19,7 @@ from utils.validations import leerFloat
 import UI.interface as ui
 from plan.methrics import calcular_metricas_sistema, calcular_metricas_procesos
 from UI.results_display import imprimir_metricas_procesos, imprimir_tabla_comparativa
+from UI.simulation_display import fcfs_simulacion
 
 def reiniciarTodos(procesos: list[Process]) -> list[Process]:
     for p in procesos:
@@ -70,6 +71,10 @@ def main() -> None:
                 historial.clear()
                 print("\n[INFO] Nuevo caso de prueba cargado. Historial comparativo reiniciado.")
             case "7":
+                procesos = reiniciarTodos(procesos)
+                fcfs_simulacion(procesos)
+                procesos = reiniciarTodos(procesos)
+            case "8":
                 print("\n¡Gracias por usar el simulador!")
                 break
             case _:
