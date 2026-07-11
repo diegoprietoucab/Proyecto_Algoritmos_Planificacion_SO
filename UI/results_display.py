@@ -9,16 +9,17 @@ def imprimir_metricas_procesos(procesos: list[Process], nombre_algoritmo: str) -
     print()
     # Usamos anchos fijos <12 para alinear el ancho de las columnas y quantumue
     # no se deforme con los datos.
-    print(f"{'PID':<5} | {'T. Retorno':<12} | {'T. Espera':<12} | {'T. Respuesta':<12}")
-    print("-" * 50)
+    print(f"{'PID':<5} | {'Ráfaga':<8} | {'T. Retorno':<12} | {'T. Espera':<12} | {'T. Respuesta':<12}")
+    print("-" * 65)
     
     for p in procesos:
         # Formateamos a 2 decimales (.2f) para quantumue se vea mucho más ordenado
-        print(f"{p.pid:<5}   {p.tiempo_retorno:<12.2f}   {p.tiempo_espera:<12.2f}   {p.tiempo_respuesta:<12.2f}")
+        print(f"{p.pid:<5}   {p.rafaga:<8.2f}   {p.tiempo_retorno:<12.2f}   {p.tiempo_espera:<12.2f}   {p.tiempo_respuesta:<12.2f}")
     print()
     
     # Leyenda para el usuario
     print("* Leyenda:")
+    print("  - Ráfaga: Tiempo de CPU requerido por el proceso cuando llega.")
     print("  - T. Retorno: Tiempo total desde que el proceso llega hasta que finaliza.")
     print("  - T. Espera: Tiempo total que el proceso pasa en la cola de listos (sin CPU).")
     print("  - T. Respuesta: Tiempo desde que el proceso llega hasta que usa la CPU por 1ra vez.\n")

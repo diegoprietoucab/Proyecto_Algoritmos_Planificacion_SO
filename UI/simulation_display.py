@@ -21,6 +21,14 @@ def _cola_texto(cola: list[Process]) -> str:
     return "[" + ", ".join(f"P{p.pid}(r={p.rafaga})" for p in cola) + "]"
 
 
+def formatear_llegada(proceso: Process, tiempo: float) -> str:
+    return f"Tiempo {tiempo}: Llega P{proceso.pid} (ráfaga={proceso.rafaga:.2f}) → Estado: {_estado(proceso)}"
+
+
+def formatear_ocio(tiempo_actual: float, duracion: float) -> str:
+    return f"Tiempo {tiempo_actual}: CPU en ocio durante {duracion:.2f} unidad(es)"
+
+
 def fcfs_simulacion(procesos: list[Process]) -> None:
     """
     Runs a visual FCFS simulation printing a progressive event log.
@@ -56,7 +64,7 @@ def fcfs_simulacion(procesos: list[Process]) -> None:
             proceso.estado = ProcessState.READY
             cola_listos.append(proceso)
             llegadas_procesadas += 1
-            print(f"Tiempo {proceso.llegada}: Llega P{proceso.pid}  →  Estado: {_estado(proceso)}")
+            print(formatear_llegada(proceso, proceso.llegada))
             admitidos = True
 
         if admitidos:
@@ -65,7 +73,12 @@ def fcfs_simulacion(procesos: list[Process]) -> None:
         if not cola_listos:
             # CPU idle: jump to next arrival
             if llegadas_procesadas < len(pendientes):
-                tiempo_actual = pendientes[llegadas_procesadas].llegada
+                tiempo_siguiente = pendientes[llegadas_procesadas].llegada
+                if tiempo_siguiente > tiempo_actual:
+                    duracion_ocio = tiempo_siguiente - tiempo_actual
+                    print(formatear_ocio(tiempo_actual, duracion_ocio))
+                    time.sleep(_DELAY_SECONDS)
+                tiempo_actual = tiempo_siguiente
                 continue
             else:
                 break

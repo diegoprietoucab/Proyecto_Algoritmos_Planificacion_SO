@@ -5,6 +5,7 @@ from tkinter import ttk, messagebox
 from plan.process.process_class import Process
 from plan.process.process_class import ProcessState
 from UI.gui.theme import COLORS, FONTS
+from UI.simulation_display import formatear_llegada, formatear_ocio
 
 _DELAY_MS = 3000
 _STATE_LABEL = {
@@ -21,6 +22,7 @@ _LOG_TAG = {
     'terminado':  COLORS['sapphire'],
     'fin':        COLORS['purple'],
     'info':       COLORS['blue'],
+    'ocio':       COLORS['peach'],
 }
 
 
@@ -169,14 +171,17 @@ class SimulationPanel(tk.Frame):
 
             if admitted:
                 txt = ''.join(
-                    f"Tiempo {p.llegada}: Llega P{p.pid}  →  Estado: Listo\n"
+                    formatear_llegada(p, p.llegada) + "\n"
                     for p in admitted
                 )
                 snap(txt, 'listo')
 
             if not cola:
                 if llegadas_ok < len(pending):
-                    t = pending[llegadas_ok].llegada
+                    siguiente = pending[llegadas_ok].llegada
+                    if siguiente > t:
+                        snap(formatear_ocio(t, siguiente - t) + "\n", 'ocio')
+                    t = siguiente
                     continue
                 break
 

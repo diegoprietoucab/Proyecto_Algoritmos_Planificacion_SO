@@ -102,11 +102,12 @@ class ResultPanel(tk.Frame):
                  ).grid(row=0, column=0, sticky='w', padx=12, pady=(10, 6))
 
         # Process metrics table
-        cols = ('PID', 'T.Retorno', 'T.Espera', 'T.Respuesta')
+        cols = ('PID', 'Ráfaga', 'T.Retorno', 'T.Espera', 'T.Respuesta')
         self._metrics_tree = ttk.Treeview(frame, columns=cols, show='headings', height=10)
-        for c in cols:
+        widths = [60, 80, 90, 90, 100]
+        for c, w in zip(cols, widths):
             self._metrics_tree.heading(c, text=c)
-            self._metrics_tree.column(c, anchor='center', width=80)
+            self._metrics_tree.column(c, anchor='center', width=w)
         self._metrics_tree.grid(row=2, column=0, sticky='nsew', padx=10, pady=(0, 8))
 
         sb2 = ttk.Scrollbar(frame, orient='vertical', command=self._metrics_tree.yview)
@@ -221,6 +222,7 @@ class ResultPanel(tk.Frame):
                 calcular_metricas_procesos(p)
                 self._metrics_tree.insert('', 'end', values=(
                     p.pid,
+                    f"{p.rafaga:.2f}",
                     f"{p.tiempo_retorno:.2f}",
                     f"{p.tiempo_espera:.2f}",
                     f"{p.tiempo_respuesta:.2f}",
