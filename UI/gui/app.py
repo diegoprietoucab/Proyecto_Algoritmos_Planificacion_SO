@@ -19,7 +19,6 @@ _NAV = [
 
 
 class MainApp(tk.Tk):
-    # Shared state
     procesos:       list[Process]
     historial:      list[dict]
     last_gantt_data: dict
@@ -44,10 +43,8 @@ class MainApp(tk.Tk):
         self._build()
         self._show('process')
 
-    # Layout
 
     def _build(self) -> None:
-        # Root grid: sidebar | separator | content
         self.columnconfigure(0, weight=0, minsize=190)
         self.columnconfigure(1, weight=0, minsize=1)
         self.columnconfigure(2, weight=1)
@@ -64,7 +61,6 @@ class MainApp(tk.Tk):
         side.grid(row=0, column=0, sticky='nsew')
         side.columnconfigure(0, weight=1)
 
-        # App logo / title
         logo_frame = tk.Frame(side, bg=COLORS['mantle'])
         logo_frame.grid(row=0, column=0, sticky='ew', pady=(16, 8))
         tk.Label(logo_frame, text="🖥", bg=COLORS['mantle'],
@@ -77,7 +73,6 @@ class MainApp(tk.Tk):
             row=1, column=0, sticky='ew', padx=12, pady=8
         )
 
-        # Nav buttons
         for i, (icon, label, key) in enumerate(_NAV):
             btn = ttk.Button(
                 side, text=f"  {icon}  {label}",
@@ -87,7 +82,6 @@ class MainApp(tk.Tk):
             btn.grid(row=i + 2, column=0, sticky='ew')
             self._nav_btns[key] = btn
 
-        # Version footer
         tk.Label(side, text="v1.0 — SO Project",
                  bg=COLORS['mantle'], fg=COLORS['overlay0'],
                  font=FONTS['small']).grid(row=99, column=0, sticky='s', pady=12)
@@ -100,7 +94,6 @@ class MainApp(tk.Tk):
         container.columnconfigure(0, weight=1)
         self._container = container
 
-        # Instantiate all panels (they all live in the same container cell)
         panel_classes = {
             'process':    ProcessPanel,
             'result':     ResultPanel,
@@ -113,19 +106,15 @@ class MainApp(tk.Tk):
             panel.grid(row=0, column=0, sticky='nsew')
             self._panels[key] = panel
 
-    # Navigation
 
     def _show(self, key: str) -> None:
         self._active_key = key
 
-        # Raise the target panel
         self._panels[key].tkraise()
 
-        # Update nav button styles
         for k, btn in self._nav_btns.items():
             btn.configure(style='NavOn.TButton' if k == key else 'Nav.TButton')
 
-    # Shared state mutators
 
     def set_procesos(self, procesos: list[Process]) -> None:
         self.procesos = procesos

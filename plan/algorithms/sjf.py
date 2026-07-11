@@ -2,8 +2,8 @@ from plan.process.process_class import Process
 from plan.process.process_state import ProcessState
 import copy
 
-#Si dos procesos de la cola de listos tienen la misma ráfaga se selcciona el quantumue llegó primero
-#Este algoritmo es no apropiativo por lo quantumue todos los procesos se ejecutan en su totalidad en un solo ciclo
+#Si dos procesos de la cola de listos tienen la misma ráfaga se selcciona el que llegó primero
+#Este algoritmo es no apropiativo por lo que todos los procesos se ejecutan en su totalidad en un solo ciclo
 
 def sjf(procesos: list[Process]):
     
@@ -25,7 +25,7 @@ def sjf(procesos: list[Process]):
     while terminados < numero_procesos:
 
         
-        # Procesar todas las llegadas quantumue ocurren en o antes del tiempo actual
+        # Procesar todas las llegadas que ocurren en o antes del tiempo actual
         while llegadas_procesadas < len(eventos_llegada) and eventos_llegada[llegadas_procesadas][0] <= tiempo_actual:
             tiempo_llegada, proceso = eventos_llegada[llegadas_procesadas]
             if proceso.estado == ProcessState.NEW:
@@ -50,16 +50,16 @@ def sjf(procesos: list[Process]):
         cola_listos.sort(key=lambda proceso: proceso.rafaga)
         proceso_actual = cola_listos.pop(0)
         #primero se ordenó por tiempo de llegada (en eventos_llegada)
-        #luego se ordenó por ráfaga en cola_listos (quantumue hizo append de eventos_llegada)
-        #por ello si dos eventos empatan en ráfaga se ejecuta el quantumue llegó primero
+        #luego se ordenó por ráfaga en cola_listos (que hizo append de eventos_llegada)
+        #por ello si dos eventos empatan en ráfaga se ejecuta el que llegó primero
         
         print(f"Inicia proceso {proceso_actual.pid}")
         proceso_actual.inicio = tiempo_actual
         
-        # Avanzar el tiempo hasta quantumue el proceso termine (no apropiativo)
+        # Avanzar el tiempo hasta que el proceso termine (no apropiativo)
         tiempo_fin = tiempo_actual + proceso_actual.rafaga
         
-        # Procesar llegadas quantumue ocurren durante la ejecucion
+        # Procesar llegadas que ocurren durante la ejecucion
         while llegadas_procesadas < len(eventos_llegada) and eventos_llegada[llegadas_procesadas][0] < tiempo_fin:
             tiempo_llegada, proceso = eventos_llegada[llegadas_procesadas]
             if proceso.estado == ProcessState.NEW:

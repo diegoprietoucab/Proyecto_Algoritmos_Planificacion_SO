@@ -7,13 +7,13 @@ def imprimir_metricas_procesos(procesos: list[Process], nombre_algoritmo: str) -
     """
     print(f"\n--- MÉTRICAS POR PROCESO ({nombre_algoritmo.upper()}) ---")
     print()
-    # Usamos anchos fijos <12 para alinear el ancho de las columnas y quantumue
+    # Usamos anchos fijos <12 para alinear el ancho de las columnas y que
     # no se deforme con los datos.
     print(f"{'PID':<5} | {'Ráfaga':<8} | {'T. Retorno':<12} | {'T. Espera':<12} | {'T. Respuesta':<12}")
     print("-" * 65)
     
     for p in procesos:
-        # Formateamos a 2 decimales (.2f) para quantumue se vea mucho más ordenado
+        # Formateamos a 2 decimales (.2f) para que se vea mucho más ordenado
         print(f"{p.pid:<5}   {p.rafaga:<8.2f}   {p.tiempo_retorno:<12.2f}   {p.tiempo_espera:<12.2f}   {p.tiempo_respuesta:<12.2f}")
     print()
     
@@ -28,7 +28,7 @@ def imprimir_metricas_procesos(procesos: list[Process], nombre_algoritmo: str) -
 def imprimir_tabla_comparativa(historial: list[dict]) -> None:
     """
     Imprime una tabla comparando el rendimiento global de los algoritmos ejecutados.
-    El historial es una lista de diccionarios quantumue recibe el nombre del algoritmo y 
+    El historial es una lista de diccionarios que recibe el nombre del algoritmo y 
     sus métricas de uso del sistema.
     """
     if len(historial) < 2:
@@ -72,3 +72,4 @@ def imprimir_tabla_comparativa(historial: list[dict]) -> None:
     print(f"lo que significa que los procesos pasan menos tiempo retenidos en la cola de listos.")
     print("-" * 84)
     print()
+    

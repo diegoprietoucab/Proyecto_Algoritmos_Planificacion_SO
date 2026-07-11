@@ -19,17 +19,14 @@ class ProcessPanel(tk.Frame):
         self.app = app
         self._build()
 
-    # Layout
 
     def _build(self) -> None:
-        # Title row
         hdr = tk.Frame(self, bg=COLORS['base'])
         hdr.pack(fill='x', padx=30, pady=(24, 0))
         tk.Label(hdr, text="📋  Gestión de Procesos",
                  bg=COLORS['base'], fg=COLORS['text'], font=FONTS['title']).pack(side='left')
         tk.Frame(self, bg=COLORS['surface1'], height=1).pack(fill='x', padx=30, pady=(8, 16))
 
-        # Two-column body
         body = tk.Frame(self, bg=COLORS['base'])
         body.pack(fill='both', expand=True, padx=30)
         body.columnconfigure(0, weight=3, minsize=300)
@@ -39,7 +36,6 @@ class ProcessPanel(tk.Frame):
         self._build_left(body)
         self._build_right(body)
 
-        # Status bar
         self._status_var = tk.StringVar(value="Sin procesos cargados")
         tk.Label(self, textvariable=self._status_var,
                  bg=COLORS['base'], fg=COLORS['subtext0'], font=FONTS['small']
@@ -53,7 +49,6 @@ class ProcessPanel(tk.Frame):
                  bg=COLORS['surface0'], fg=COLORS['blue'], font=FONTS['heading']
                  ).pack(anchor='w', padx=16, pady=(14, 8))
 
-        #  Preset file
         sec1 = self._section(left, "Desde archivo predefinido")
         self._preset_var = tk.StringVar(value='Básicos')
         ttk.Combobox(sec1, textvariable=self._preset_var,
@@ -67,7 +62,6 @@ class ProcessPanel(tk.Frame):
         ttk.Button(row1, text="Examinar JSON…", style='TButton',
                    command=self._browse_file).pack(side='left', padx=(8, 0))
 
-        #  Manual entry
         sec2 = self._section(left, "Crear manualmente")
         fields_frame = tk.Frame(sec2, bg=COLORS['surface0'])
         fields_frame.pack(padx=10, pady=(6, 4), anchor='w')
@@ -89,7 +83,6 @@ class ProcessPanel(tk.Frame):
         ttk.Button(sec2, text="➕  Agregar proceso", style='TButton',
                    command=self._add_manual).pack(padx=10, pady=(0, 10), anchor='w')
 
-        #  Danger zone
         ttk.Separator(left, orient='horizontal').pack(fill='x', padx=12, pady=6)
         ttk.Button(left, text="🗑  Limpiar todo", style='Danger.TButton',
                    command=self._clear_all).pack(padx=12, pady=(0, 14), anchor='w')
@@ -120,8 +113,6 @@ class ProcessPanel(tk.Frame):
         sb.grid(row=0, column=1, sticky='ns')
         self._tree.configure(yscrollcommand=sb.set)
 
-    # Helpers
-
     @staticmethod
     def _section(parent: tk.Frame, title: str) -> tk.Frame:
         lf = tk.LabelFrame(parent, text=f"  {title}  ",
@@ -130,8 +121,6 @@ class ProcessPanel(tk.Frame):
                            highlightbackground=COLORS['surface1'])
         lf.pack(fill='x', padx=12, pady=(0, 10))
         return lf
-
-    # Actions
 
     def _load_preset(self) -> None:
         path = PRESETS.get(self._preset_var.get(), '')
@@ -184,8 +173,6 @@ class ProcessPanel(tk.Frame):
         if messagebox.askyesno("Confirmar", "¿Eliminar todos los procesos cargados?"):
             self.app.set_procesos([])
             self._status_var.set("Sin procesos cargados")
-
-    # Called by app when processes change
 
     def on_update(self) -> None:
         self._tree.delete(*self._tree.get_children())

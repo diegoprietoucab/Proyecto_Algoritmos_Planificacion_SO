@@ -21,16 +21,12 @@ class ResultPanel(tk.Frame):
         self._runner = AlgorithmRunner(app)
         self._build()
 
-    # Layout
-
     def _build(self) -> None:
-        # Title
         tk.Label(self, text="⚙️  Ejecutar Algoritmo",
                  bg=COLORS['base'], fg=COLORS['text'], font=FONTS['title']
                  ).pack(anchor='w', padx=30, pady=(24, 0))
         tk.Frame(self, bg=COLORS['surface1'], height=1).pack(fill='x', padx=30, pady=(8, 16))
 
-        # Controls bar
         ctrl = tk.Frame(self, bg=COLORS['surface0'])
         ctrl.pack(fill='x', padx=30, pady=(0, 12))
 
@@ -42,7 +38,6 @@ class ResultPanel(tk.Frame):
         algo_cb.pack(side='left')
         algo_cb.bind('<<ComboboxSelected>>', self._on_algo_change)
 
-        # Quantum (shown only for Round Robin)
         self._q_label = tk.Label(ctrl, text="Quantum:", bg=COLORS['surface0'],
                                   fg=COLORS['subtext1'], font=FONTS['body'])
         self._q_var = tk.StringVar(value='2')
@@ -55,7 +50,6 @@ class ResultPanel(tk.Frame):
                                     command=self._run)
         self._run_btn.pack(side='right', padx=12)
 
-        # Main split: log (left) | metrics (right)
         body = tk.Frame(self, bg=COLORS['base'])
         body.pack(fill='both', expand=True, padx=30, pady=(0, 12))
         body.columnconfigure(0, weight=3)
@@ -65,7 +59,6 @@ class ResultPanel(tk.Frame):
         self._build_log(body)
         self._build_metrics(body)
 
-        # Status bar
         self._status_var = tk.StringVar(value="Seleccione un algoritmo y presione Ejecutar")
         tk.Label(self, textvariable=self._status_var,
                  bg=COLORS['base'], fg=COLORS['subtext0'], font=FONTS['small']
@@ -101,7 +94,6 @@ class ResultPanel(tk.Frame):
                  bg=COLORS['surface0'], fg=COLORS['blue'], font=FONTS['heading']
                  ).grid(row=0, column=0, sticky='w', padx=12, pady=(10, 6))
 
-        # Process metrics table
         cols = ('PID', 'Ráfaga', 'T.Retorno', 'T.Espera', 'T.Respuesta')
         self._metrics_tree = ttk.Treeview(frame, columns=cols, show='headings', height=10)
         widths = [60, 80, 90, 90, 100]
@@ -114,7 +106,6 @@ class ResultPanel(tk.Frame):
         sb2.grid(row=2, column=1, sticky='ns', pady=(0, 8))
         self._metrics_tree.configure(yscrollcommand=sb2.set)
 
-        # System metrics summary card
         summ = tk.Frame(frame, bg=COLORS['surface1'])
         summ.grid(row=3, column=0, columnspan=2, sticky='ew', padx=10, pady=(0, 10))
 
@@ -133,7 +124,6 @@ class ResultPanel(tk.Frame):
                      fg=COLORS['text'], font=('Segoe UI', 10, 'bold')
                      ).grid(row=row_idx, column=1, sticky='w', padx=4)
 
-    # Logic
 
     def _on_algo_change(self, _event=None) -> None:
         algo = self._algo_var.get()
@@ -153,7 +143,6 @@ class ResultPanel(tk.Frame):
                                    "Primero cargue procesos desde el panel de Gestión.")
             return
 
-        # Deep-copy so we don't mutate the master list between algorithm runs
         procesos = copy.deepcopy(self.app.procesos)
         algo = self._algo_var.get()
 
@@ -195,13 +184,9 @@ class ResultPanel(tk.Frame):
         algo = self._algo_var.get()
         procesos = copy.deepcopy(self.app.procesos)
 
-        # Re-run silently to get process objects with inicio/fin set
-        # We parse the captured log instead of re-running.
         segments = build_segments(log_text, procesos)
         self.app.set_gantt_data(segments, algo)
 
-        # Calculate metrics from captured times embedded in the log
-        # Build timing from segments per process
         pid_times: dict[int, tuple] = {}
         for pid, start, end in segments:
             if pid not in pid_times:
@@ -213,7 +198,6 @@ class ResultPanel(tk.Frame):
             if p.pid in pid_times:
                 p.inicio, p.fin = pid_times[p.pid]
 
-        # Calculate and display metrics
         self._metrics_tree.delete(*self._metrics_tree.get_children())
         tiempo_total = max((end for _, _, end in segments), default=0.0)
 

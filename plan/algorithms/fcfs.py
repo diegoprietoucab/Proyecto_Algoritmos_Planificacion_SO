@@ -47,7 +47,7 @@ def fcfs(procesos: list[Process]) -> None:
         proceso_actual.fin = tiempo_actual
         proceso_actual.estado = ProcessState.FINISHED
         
-        # Mostrar llegadas quantumue ocurrieron DURANTE la ejecución
+        # Mostrar llegadas que ocurrieron DURANTE la ejecución
         while llegadas_procesadas < len(pendientes) and pendientes[llegadas_procesadas].llegada < tiempo_actual:
             proceso = pendientes[llegadas_procesadas]
             proceso.estado = ProcessState.READY

@@ -15,8 +15,6 @@ class AlgorithmRunner:
         self._on_done: Callable | None = None
         self._output_buf: str = ""
 
-    # Public
-
     def run(
         self,
         fn: Callable,
@@ -35,8 +33,6 @@ class AlgorithmRunner:
         thread = threading.Thread(target=self._worker, args=(fn, args), daemon=True)
         thread.start()
         self._poll()
-
-    # Private
 
     def _worker(self, fn: Callable, args: tuple) -> None:
         q = self._q

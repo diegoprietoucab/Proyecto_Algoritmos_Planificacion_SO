@@ -10,15 +10,12 @@ class ComparativePanel(tk.Frame):
         self.app = app
         self._build()
 
-    #  Layout
-
     def _build(self) -> None:
         tk.Label(self, text="📈  Tabla Comparativa",
                  bg=COLORS['base'], fg=COLORS['text'], font=FONTS['title']
                  ).pack(anchor='w', padx=30, pady=(24, 0))
         tk.Frame(self, bg=COLORS['surface1'], height=1).pack(fill='x', padx=30, pady=(8, 16))
 
-        # Action row
         row = tk.Frame(self, bg=COLORS['base'])
         row.pack(fill='x', padx=30, pady=(0, 10))
         self._note = tk.Label(row, text="Ejecute al menos 2 algoritmos para comparar.",
@@ -27,7 +24,6 @@ class ComparativePanel(tk.Frame):
         ttk.Button(row, text="🗑  Limpiar historial", style='Danger.TButton',
                    command=self._clear).pack(side='right')
 
-        # Table
         cols = ('Algoritmo', 'T.Retorno Prom.', 'T.Espera Prom.', 'Uso CPU (%)')
         frame = tk.Frame(self, bg=COLORS['surface0'])
         frame.pack(fill='both', expand=True, padx=30, pady=(0, 12))
@@ -45,22 +41,16 @@ class ComparativePanel(tk.Frame):
         sb.grid(row=0, column=1, sticky='ns', pady=10)
         self._tree.configure(yscrollcommand=sb.set)
 
-        # Highlight tags
         self._tree.tag_configure('best', foreground=COLORS['green'],
                                   font=('Segoe UI', 10, 'bold'))
         self._tree.tag_configure('normal', foreground=COLORS['text'])
 
-        # Conclusion label
         self._conclusion = tk.Label(self, text='', bg=COLORS['base'],
                                      fg=COLORS['green'], font=FONTS['heading'])
         self._conclusion.pack(anchor='w', padx=30, pady=(0, 12))
 
-    #  Public
-
     def on_update(self) -> None:
         self._refresh()
-
-    #  Internal
 
     def _refresh(self) -> None:
         self._tree.delete(*self._tree.get_children())
@@ -97,7 +87,6 @@ class ComparativePanel(tk.Frame):
                               values=(name, f"{retorno:.2f}", f"{espera:.2f}", f"{cpu:.1f}%"),
                               tags=('pending',))
 
-        # Re-tag best row
         for iid in self._tree.get_children():
             vals = self._tree.item(iid, 'values')
             tag  = 'best' if vals[0] == best_name else 'normal'

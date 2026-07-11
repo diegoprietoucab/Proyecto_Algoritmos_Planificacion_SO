@@ -1,5 +1,3 @@
-#de momento sólo se permite creación de procesos 
-
 import sys
 import os
 
@@ -67,7 +65,7 @@ def main() -> None:
             case "6":
                 procesos = cargaProcesos()
                 ui.imprimir_tabla_inicial(procesos)
-                # Limpiamos el historial porquantumue cambiaron los procesos del caso de prueba
+                # Limpiamos el historial porque cambiaron los procesos del caso de prueba
                 historial.clear()
                 print("\n[INFO] Nuevo caso de prueba cargado. Historial comparativo reiniciado.")
             case "7":

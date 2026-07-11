@@ -13,7 +13,7 @@ def calcular_metricas_procesos(proceso: Process) -> None:
 #Con esta función se pueden calcular las métricas del sistema después
 # de ejecutar un algoritmo. Se le pasa la lista de procesos y el tiempo 
 # total de ejecución para calcular el porcentaje de CPU usada.
-#Retornamos un diccionario con las métricas del sistema para no tener quantumyue
+#Retornamos un diccionario con las métricas del sistema para no tener que
 #hacer varias funciones para calcular cada métrica y retornarlas por separado.
 def calcular_metricas_sistema(procesos: list[Process],tiempo_total: float) -> dict:
     n = len(procesos)

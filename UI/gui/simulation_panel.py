@@ -7,7 +7,7 @@ from plan.process.process_class import ProcessState
 from UI.gui.theme import COLORS, FONTS
 from UI.simulation_display import formatear_llegada, formatear_ocio
 
-_DELAY_MS = 3000
+_DELAY_MS = 1500
 _STATE_LABEL = {
     ProcessState.NEW:      ('Nuevo',      COLORS['subtext0']),
     ProcessState.READY:    ('Listo',      COLORS['yellow']),
@@ -36,15 +36,12 @@ class SimulationPanel(tk.Frame):
         self._running: bool = False
         self._build()
 
-    # Layout
-
     def _build(self) -> None:
         tk.Label(self, text="🔄  Simulación FCFS (con estados)",
                  bg=COLORS['base'], fg=COLORS['text'], font=FONTS['title']
                  ).pack(anchor='w', padx=30, pady=(24, 0))
         tk.Frame(self, bg=COLORS['surface1'], height=1).pack(fill='x', padx=30, pady=(8, 12))
 
-        # Controls
         ctrl = tk.Frame(self, bg=COLORS['base'])
         ctrl.pack(fill='x', padx=30, pady=(0, 10))
 
@@ -70,7 +67,6 @@ class SimulationPanel(tk.Frame):
                  insertbackground=COLORS['text'], relief='flat',
                  font=FONTS['body']).pack(side='right')
 
-        # Body
         body = tk.Frame(self, bg=COLORS['base'])
         body.pack(fill='both', expand=True, padx=30, pady=(0, 12))
         body.columnconfigure(0, weight=3)
@@ -80,7 +76,6 @@ class SimulationPanel(tk.Frame):
         self._build_log(body)
         self._build_state_table(body)
 
-        # Status
         self._status_var = tk.StringVar(value="Cargue procesos e inicie la simulación")
         tk.Label(self, textvariable=self._status_var,
                  bg=COLORS['base'], fg=COLORS['subtext0'], font=FONTS['small']
@@ -105,7 +100,6 @@ class SimulationPanel(tk.Frame):
         sb.grid(row=1, column=1, sticky='ns', pady=(0, 10))
         self._log.configure(yscrollcommand=sb.set)
 
-        # Color tags for the log
         for tag, color in _LOG_TAG.items():
             self._log.tag_configure(tag, foreground=color)
 
@@ -131,14 +125,11 @@ class SimulationPanel(tk.Frame):
         sb.grid(row=1, column=1, sticky='ns', pady=(0, 10))
         self._state_tree.configure(yscrollcommand=sb.set)
 
-        # Row color tags
         self._state_tree.tag_configure('nuevo',      foreground=COLORS['subtext0'])
         self._state_tree.tag_configure('listo',      foreground=COLORS['yellow'])
         self._state_tree.tag_configure('ejecutando', foreground=COLORS['green'],
                                        font=('Segoe UI', 10, 'bold'))
         self._state_tree.tag_configure('terminado',  foreground=COLORS['sapphire'])
-
-    # Simulation engine
 
     def _generate_steps(self, procesos: list[Process]) -> list[dict]:
         steps: list[dict] = []
@@ -160,7 +151,6 @@ class SimulationPanel(tk.Frame):
         t = 0.0
 
         while terminados < len(pending):
-            # Admit arrivals
             admitted: list[Process] = []
             while llegadas_ok < len(pending) and pending[llegadas_ok].llegada <= t:
                 p = pending[llegadas_ok]
@@ -185,11 +175,9 @@ class SimulationPanel(tk.Frame):
                     continue
                 break
 
-            # Show queue
             q_txt = ', '.join(f"P{p.pid}(r={p.rafaga})" for p in cola)
             snap(f"Cola de listos: [{q_txt}]\n", 'listo')
 
-            # Execute
             proc = cola.pop(0)
             state_map[proc.pid] = ProcessState.RUNNING
             proc.inicio = t
@@ -199,7 +187,6 @@ class SimulationPanel(tk.Frame):
             proc.fin = t
             state_map[proc.pid] = ProcessState.FINISHED
 
-            # Mid-execution arrivals
             during = ''
             while llegadas_ok < len(pending) and pending[llegadas_ok].llegada < t:
                 p = pending[llegadas_ok]
@@ -215,7 +202,6 @@ class SimulationPanel(tk.Frame):
         snap("─────────── FIN DE LA SIMULACIÓN ───────────\n", 'fin')
         return steps
 
-    # Playback
 
     def _start(self) -> None:
         if not self.app.procesos:
@@ -270,8 +256,6 @@ class SimulationPanel(tk.Frame):
         self._log.delete('1.0', tk.END)
         self._log.configure(state='disabled')
         self._state_tree.delete(*self._state_tree.get_children())
-
-    # Helpers
 
     def _append_log(self, text: str, tag: str) -> None:
         self._log.configure(state='normal')

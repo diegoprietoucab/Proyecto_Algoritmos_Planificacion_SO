@@ -40,7 +40,6 @@ PROCESS_COLORS = [
 
 
 def apply_theme(root: tk.Tk) -> None:
-    """Configure ttk styles for the dark Catppuccin Mocha theme."""
     style = ttk.Style(root)
     style.theme_use('clam')
 
@@ -50,16 +49,12 @@ def apply_theme(root: tk.Tk) -> None:
     border  = COLORS['surface1']
     sel_bg  = COLORS['surface1']
 
-    # Base
-
     style.configure('.', background=bg, foreground=fg, font=FONTS['body'], borderwidth=0)
 
-    # Frames
     style.configure('TFrame',       background=bg)
     style.configure('Card.TFrame',  background=card)
     style.configure('Side.TFrame',  background=COLORS['mantle'])
 
-    # Labels
     style.configure('TLabel',         background=bg,   foreground=fg)
     style.configure('Title.TLabel',   background=bg,   foreground=fg,             font=FONTS['title'])
     style.configure('Heading.TLabel', background=bg,   foreground=COLORS['blue'], font=FONTS['heading'])
@@ -67,7 +62,6 @@ def apply_theme(root: tk.Tk) -> None:
     style.configure('Card.TLabel',    background=card, foreground=fg)
     style.configure('Side.TLabel',    background=COLORS['mantle'], foreground=fg)
 
-    # Buttons
     style.configure('TButton',
         background=card, foreground=fg,
         padding=(10, 6), relief='flat', focusthickness=0,
@@ -99,7 +93,6 @@ def apply_theme(root: tk.Tk) -> None:
         font=('Segoe UI', 10, 'bold'), padding=(10, 6),
     )
 
-    # Nav sidebar buttons
     style.configure('Nav.TButton',
         background=COLORS['mantle'], foreground=COLORS['subtext1'],
         padding=(18, 12), anchor='w', font=FONTS['body'],
@@ -117,7 +110,6 @@ def apply_theme(root: tk.Tk) -> None:
         foreground=[('active', COLORS['blue'])],
     )
 
-    # Entry / Combobox
     style.configure('TEntry',
         fieldbackground=card, foreground=fg,
         insertcolor=fg, padding=6,
@@ -132,7 +124,6 @@ def apply_theme(root: tk.Tk) -> None:
         foreground=[('readonly', fg)],
     )
 
-    # Treeview
     style.configure('Treeview',
         background=card, foreground=fg,
         fieldbackground=card, rowheight=26,
@@ -149,16 +140,13 @@ def apply_theme(root: tk.Tk) -> None:
         background=[('active', card)],
     )
 
-    # Scrollbar
     style.configure('TScrollbar',
         background=card, troughcolor=COLORS['mantle'],
         arrowcolor=COLORS['subtext0'], width=8,
     )
 
-    # Separator
     style.configure('TSeparator', background=border)
 
-    # Notebook (tabs inside panels)
     style.configure('TNotebook',       background=bg,   borderwidth=0)
     style.configure('TNotebook.Tab',
         background=card, foreground=COLORS['subtext0'],
