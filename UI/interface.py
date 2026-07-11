@@ -17,9 +17,9 @@ def imprimir_tabla_inicial(procesos: list[Process]) -> None:
     """
     print("\n--- DATOS INICIALES DE LOS PROCESOS ---")
     print()
-    print("PID | Llegada | Ráfaga | Prioridad")
-    print("-----------------------------------")
+    print(f"{'PID':<6} | {'Llegada':<8} | {'Ráfaga':<8} | {'Prioridad':<10}")
+    print("-" * 42)
     
     for p in procesos:
-        print(f"{p.pid}     {p.llegada}        {p.rafaga}       {p.prioridad}")
+        print(f"{p.pid:<6} | {p.llegada:<8} | {p.rafaga:<8} | {p.prioridad:<10}")
     print()
