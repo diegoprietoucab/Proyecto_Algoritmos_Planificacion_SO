@@ -8,6 +8,7 @@ from UI.gui.result_panel import ResultPanel
 from UI.gui.gantt_panel import GanttPanel
 from UI.gui.comparative_panel import ComparativePanel
 from UI.gui.simulation_panel import SimulationPanel
+from utils.process_generator import obtenerRutaAbsoluta
 
 _NAV = [
     ('📋', 'Procesos',    'process'),
@@ -16,7 +17,6 @@ _NAV = [
     ('📈', 'Comparativa', 'comparative'),
     ('🔄', 'Simulación',  'simulation'),
 ]
-
 
 class MainApp(tk.Tk):
     procesos:       list[Process]
@@ -29,7 +29,14 @@ class MainApp(tk.Tk):
         self.geometry("1200x720")
         self.minsize(900, 600)
         self.configure(bg=COLORS['base'])
-
+        # Función para poder colcarle un icono.ico a la ventana
+        # del ejecutable.
+        try:
+            ruta_icono = obtenerRutaAbsoluta("icon.ico") # Usamos la misma función para obtener la ruta absoluta.
+            self.iconbitmap(ruta_icono)
+        except Exception as e:
+            print(f"Advertencia: No se pudo cargar el icono: {e}")
+            
         apply_theme(self)
 
         self.procesos        = []
@@ -81,10 +88,19 @@ class MainApp(tk.Tk):
             )
             btn.grid(row=i + 2, column=0, sticky='ew')
             self._nav_btns[key] = btn
+        
+        #Texto de pie de página del main
+        text_footer = (
+            "SO Project — v3.0.1\n"
+            "Universidad Católica Andrés Bello\n"
+            "Antias, Prieto & Mora © 2026"
+        )
 
-        tk.Label(side, text="v1.0 — SO Project",
-                 bg=COLORS['mantle'], fg=COLORS['overlay0'],
-                 font=FONTS['small']).grid(row=99, column=0, sticky='s', pady=12)
+        tk.Label(side, text=text_footer,
+                 bg=COLORS['mantle'],
+                 fg=COLORS['white'],
+                 font=FONTS['footer'],
+                 justify='center').grid(row=99, column=0, sticky='s', pady=(0, 16))
         side.rowconfigure(99, weight=1)
 
     def _build_content(self) -> None:

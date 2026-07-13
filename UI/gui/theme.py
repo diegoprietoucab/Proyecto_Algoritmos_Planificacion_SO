@@ -22,6 +22,7 @@ COLORS = {
     'teal':     '#94e2d5',
     'peach':    '#fab387',
     'pink':     '#f5c2e7',
+    'white':    '#f5f5f5',
 }
 
 FONTS = {
@@ -29,6 +30,7 @@ FONTS = {
     'heading': ('Segoe UI', 12, 'bold'),
     'body':    ('Segoe UI', 10),
     'small':   ('Segoe UI', 9),
+    'footer':   ('Segoe UI', 9, 'bold'),
     'mono':    ('Consolas', 10),
     'mono_sm': ('Consolas', 9),
 }

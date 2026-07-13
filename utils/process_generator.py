@@ -1,3 +1,5 @@
+import os
+import sys
 from plan.process.process_class import Process
 import utils.validations as val
 from utils.file_handler import leerProcesosJSON
@@ -50,6 +52,31 @@ def menu() -> None:
     print("2. Procesos variados")
     print("3. Procesos personales")
     print("4. Prueba de round robin\n")
+    
+def obtenerRutaAbsoluta(ruta_relativa):
+    """
+    Obtiene la ruta absoluta de los archivos Json, 
+    para que el programa sepa donde ubicar dichos archivos
+    en dado caso que estemos en modo desarrollo o en el ejecutable.
+    
+    El bloque try intenta buscar sys._MEIPASS, en dado caso de que no
+    se encuentre, se asume que estamos en el modo desarrollador y salta
+    al bloque except, donde se obtiene la ruta absoluta del directorio actual.
+    En dado caso de que el try funcione, entonces se toma toda la ruta de sys._MEIPASS 
+    y se le agrega la ruta relativa del archivo.
+    """
+    try:
+        # _MEIPASS es el directorio temporal que crea PyInstaller para
+        # almacenar la ruta de los archivos cuando se ejecuta el programa 
+        # como un ejecutable.
+        ruta_base = sys._MEIPASS
+    except Exception:
+        # Este comando le pide al sistema operativo la ruta de la carpeta 
+        # actual donde se está trabajando.
+        ruta_base = os.path.abspath(".")
+        # Este comando unifica la ruta base con la ruta relativa del archivo, 
+        # con su respectivo "\"" para obtener la ruta absoluta del archivo.
+    return os.path.join(ruta_base, ruta_relativa)
 
 def crearListaPredefinida() -> list[Process]:
     procesos = []
@@ -71,8 +98,11 @@ def crearListaPredefinida() -> list[Process]:
                 break
             case _:
                 print("\nERROR. Asegúrese de ingresar una opción válida")
+                continue
+            
+    ruta_relativa = obtenerRutaAbsoluta(ruta)
     try:
-        procesos = leerProcesosJSON(ruta) 
+        procesos = leerProcesosJSON(ruta_relativa) 
     except(ValueError, TypeError, KeyError, FileNotFoundError) as error:
         print(error)
 
