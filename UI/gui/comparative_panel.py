@@ -41,9 +41,15 @@ class ComparativePanel(tk.Frame):
         sb.grid(row=0, column=1, sticky='ns', pady=10)
         self._tree.configure(yscrollcommand=sb.set)
 
-        self._tree.tag_configure('best', foreground=COLORS['green'],
+        # Row tags
+        self._tree.tag_configure('best',
+                                  foreground=COLORS['green'],
                                   font=('Segoe UI', 10, 'bold'))
         self._tree.tag_configure('normal', foreground=COLORS['text'])
+        self._tree.tag_configure('separator',
+                                  foreground=COLORS['blue'],
+                                  font=('Segoe UI', 10, 'bold'),
+                                  background=COLORS['surface1'])
 
         self._conclusion = tk.Label(self, text='', bg=COLORS['base'],
                                      fg=COLORS['green'], font=FONTS['heading'])
@@ -69,28 +75,45 @@ class ComparativePanel(tk.Frame):
             fg=COLORS['subtext1'],
         )
 
-        best_name = ''
-        best_espera = float('inf')
+        # Find the global best (lowest espera across all datasets)
+        best_espera = min(r['metricas']['tiempo_espera_promedio'] for r in hist)
 
+        # Group records by dataset, preserving insertion order
+        groups: dict[str, list[dict]] = {}
         for reg in hist:
-            name     = reg['algoritmo']
-            m        = reg['metricas']
-            retorno  = m['tiempo_retorno_promedio']
-            espera   = m['tiempo_espera_promedio']
-            cpu      = m['porcentaje_cpu_usada']
+            ds = reg.get('dataset', 'Manual')
+            groups.setdefault(ds, []).append(reg)
 
-            if espera < best_espera:
-                best_espera = espera
-                best_name   = name
-
+        first_group = True
+        for dataset_name, records in groups.items():
+            # Separator row (blank values, label in Algoritmo column)
+            sep_text = f"─── {dataset_name} ───"
             self._tree.insert('', 'end',
-                              values=(name, f"{retorno:.2f}", f"{espera:.2f}", f"{cpu:.1f}%"),
-                              tags=('pending',))
+                              values=(sep_text, '', '', ''),
+                              tags=('separator',))
 
-        for iid in self._tree.get_children():
-            vals = self._tree.item(iid, 'values')
-            tag  = 'best' if vals[0] == best_name else 'normal'
-            self._tree.item(iid, tags=(tag,))
+            for reg in records:
+                name    = reg['algoritmo']
+                m       = reg['metricas']
+                retorno = m['tiempo_retorno_promedio']
+                espera  = m['tiempo_espera_promedio']
+                cpu     = m['porcentaje_cpu_usada']
+
+                is_best = (espera == best_espera)
+                tag = 'best' if is_best else 'normal'
+
+                self._tree.insert('', 'end',
+                                  values=(name,
+                                          f"{retorno:.2f}",
+                                          f"{espera:.2f}",
+                                          f"{cpu:.1f}%"),
+                                  tags=(tag,))
+
+            first_group = False
+
+        # Find name of globally best entry for the summary label
+        best_reg = min(hist, key=lambda r: r['metricas']['tiempo_espera_promedio'])
+        best_name = best_reg['algoritmo']
 
         self._conclusion.configure(
             text=f"🏆  Algoritmo más eficiente: {best_name}  "

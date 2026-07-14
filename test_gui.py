@@ -9,7 +9,7 @@ app = MainApp()
 app.withdraw()
 
 procesos = [Process(1,0,8,3), Process(2,1,4,1), Process(3,2,9,4), Process(4,3,5,2)]
-app.set_procesos(procesos)
+app.set_procesos(procesos, 'Variados')
 
 sp = app._panels['simulation']
 try:
@@ -32,8 +32,13 @@ except Exception as e:
     traceback.print_exc()
 
 app.add_to_historial('FCFS', {'tiempo_retorno_promedio': 15.25, 'tiempo_espera_promedio': 8.75, 'porcentaje_cpu_usada': 100.0})
-app.add_to_historial('SJF', {'tiempo_retorno_promedio': 12.0, 'tiempo_espera_promedio': 5.5, 'porcentaje_cpu_usada': 100.0})
-print('Historial OK:', len(app.historial), 'entries')
+app.add_to_historial('SJF',  {'tiempo_retorno_promedio': 12.0,  'tiempo_espera_promedio': 5.5,  'porcentaje_cpu_usada': 100.0})
+assert app.historial[0]['dataset'] == 'Variados', f"Expected 'Variados', got {app.historial[0]['dataset']}"
+
+app.set_procesos(procesos, 'Básicos')
+app.add_to_historial('FCFS', {'tiempo_retorno_promedio': 13.20, 'tiempo_espera_promedio': 8.40, 'porcentaje_cpu_usada': 100.0})
+assert app.historial[2]['dataset'] == 'Básicos', f"Expected 'Básicos', got {app.historial[2]['dataset']}"
+print('Historial OK:', len(app.historial), 'entries, datasets:', [r['dataset'] for r in app.historial])
 
 app.destroy()
 print('ALL TESTS PASSED')

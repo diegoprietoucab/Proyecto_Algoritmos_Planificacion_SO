@@ -42,6 +42,7 @@ class MainApp(tk.Tk):
         self.procesos        = []
         self.historial       = []
         self.last_gantt_data = {'segments': [], 'algorithm': ''}
+        self.dataset_label   = 'Manual'
 
         self._active_key: str = 'process'
         self._nav_btns:   dict[str, ttk.Button] = {}
@@ -93,7 +94,7 @@ class MainApp(tk.Tk):
         text_footer = (
             "SO Project — v3.0.1\n"
             "Universidad Católica Andrés Bello\n"
-            "Antias, Prieto & Mora © 2026"
+            "Antias, Mora & Prieto © 2026"
         )
 
         tk.Label(side, text=text_footer,
@@ -132,13 +133,19 @@ class MainApp(tk.Tk):
             btn.configure(style='NavOn.TButton' if k == key else 'Nav.TButton')
 
 
-    def set_procesos(self, procesos: list[Process]) -> None:
+    def set_procesos(self, procesos: list[Process], label: str = '') -> None:
         self.procesos = procesos
+        if label:
+            self.dataset_label = label
         for panel in self._panels.values():
             panel.on_update()
 
     def add_to_historial(self, algorithm: str, metricas: dict) -> None:
-        self.historial.append({'algoritmo': algorithm, 'metricas': metricas})
+        self.historial.append({
+            'algoritmo': algorithm,
+            'metricas': metricas,
+            'dataset': self.dataset_label,
+        })
         self._panels['comparative'].on_update()
 
     def set_gantt_data(self, segments: list, algorithm: str) -> None:

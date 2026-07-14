@@ -11,10 +11,15 @@ env/
 ENV/
 
 # Distribution / packaging 
-dist/
-build/
+localpycs/
 *.egg-info/
 *.egg
+Analysis-00.toc
+base_library.zip
+EXE-00.toc
+PKG-00.toc
+PYZ-00.toc
+PYZ-00.pyz
 
 # Testing & coverage 
 .pytest_cache/
@@ -30,9 +35,3 @@ htmlcov/
 # OS artifacts 
 .DS_Store
 Thumbs.db
-
-# Testing & coverage 
-.vscode/
-.idea/
-*.suo
-*.user

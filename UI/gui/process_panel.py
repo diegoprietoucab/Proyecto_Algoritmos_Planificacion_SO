@@ -123,8 +123,9 @@ class ProcessPanel(tk.Frame):
         return lf
 
     def _load_preset(self) -> None:
-        path = PRESETS.get(self._preset_var.get(), '')
-        self._load_file(path)
+        label = self._preset_var.get()
+        path = PRESETS.get(label, '')
+        self._load_file(path, label)
 
     def _browse_file(self) -> None:
         path = filedialog.askopenfilename(
@@ -132,12 +133,14 @@ class ProcessPanel(tk.Frame):
             filetypes=[("JSON", "*.json"), ("Todos", "*.*")],
         )
         if path:
-            self._load_file(path)
+            import os
+            label = os.path.splitext(os.path.basename(path))[0].capitalize()
+            self._load_file(path, label)
 
-    def _load_file(self, path: str) -> None:
+    def _load_file(self, path: str, label: str = 'Manual') -> None:
         try:
             procesos = leerProcesosJSON(path)
-            self.app.set_procesos(procesos)
+            self.app.set_procesos(procesos, label)
             self._status_var.set(f"✅  {len(procesos)} procesos cargados desde archivo")
         except Exception as exc:
             messagebox.showerror("Error al cargar", str(exc).strip())

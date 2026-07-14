@@ -182,10 +182,18 @@ class ResultPanel(tk.Frame):
             return
 
         algo = self._algo_var.get()
+        if algo == 'Round Robin':
+            try:
+                q = float(self._q_var.get())
+                algo_display = f"Round Robin (q={q:g})"
+            except ValueError:
+                algo_display = 'Round Robin'
+        else:
+            algo_display = algo
         procesos = copy.deepcopy(self.app.procesos)
 
         segments = build_segments(log_text, procesos)
-        self.app.set_gantt_data(segments, algo)
+        self.app.set_gantt_data(segments, algo_display)
 
         pid_times: dict[int, tuple] = {}
         for pid, start, end in segments:
@@ -220,9 +228,9 @@ class ResultPanel(tk.Frame):
             self._sys_labels['espera'].set(f"{metricas['tiempo_espera_promedio']:.2f}")
             self._sys_labels['cpu'].set(f"{metricas['porcentaje_cpu_usada']:.1f}%")
 
-            self.app.add_to_historial(algo, metricas)
+            self.app.add_to_historial(algo_display, metricas)
 
-        self._status_var.set(f"✅  {algo} completado — {len(procesos)} procesos")
+        self._status_var.set(f"✅  {algo_display} completado — {len(procesos)} procesos")
 
     def on_update(self) -> None:
         pass
