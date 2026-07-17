@@ -83,7 +83,7 @@ class GanttPanel(tk.Frame):
         margin_bottom = 60
         row_height = 50
         bar_height = 30
-        time_unit_px = max(35, 800 // int(total_time))  # Dynamic scaling
+        time_unit_px = max(35, 800 // int(total_time))  
 
         canvas_width = margin_left + total_time * time_unit_px + margin_right
         canvas_height = margin_top + n_rows * row_height + margin_bottom

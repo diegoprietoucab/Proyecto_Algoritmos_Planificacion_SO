@@ -41,7 +41,6 @@ class ComparativePanel(tk.Frame):
         sb.grid(row=0, column=1, sticky='ns', pady=10)
         self._tree.configure(yscrollcommand=sb.set)
 
-        # Row tags
         self._tree.tag_configure('best',
                                   foreground=COLORS['green'],
                                   font=('Segoe UI', 10, 'bold'))
@@ -75,10 +74,8 @@ class ComparativePanel(tk.Frame):
             fg=COLORS['subtext1'],
         )
 
-        # Find the global best (lowest espera across all datasets)
         best_espera = min(r['metricas']['tiempo_espera_promedio'] for r in hist)
 
-        # Group records by dataset, preserving insertion order
         groups: dict[str, list[dict]] = {}
         for reg in hist:
             ds = reg.get('dataset', 'Manual')
@@ -86,7 +83,6 @@ class ComparativePanel(tk.Frame):
 
         first_group = True
         for dataset_name, records in groups.items():
-            # Separator row (blank values, label in Algoritmo column)
             sep_text = f"─── {dataset_name} ───"
             self._tree.insert('', 'end',
                               values=(sep_text, '', '', ''),
@@ -111,7 +107,6 @@ class ComparativePanel(tk.Frame):
 
             first_group = False
 
-        # Find name of globally best entry for the summary label
         best_reg = min(hist, key=lambda r: r['metricas']['tiempo_espera_promedio'])
         best_name = best_reg['algoritmo']
 
